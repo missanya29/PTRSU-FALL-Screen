@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const KEY = 'rsuFallScreenV2';
-  const defaultState = () => ({ step: 1, patient: {}, screening: {}, tug: {}, balance: { times: [null, null, null, null] }, chair: {} });
+  const defaultState = () => ({ step: 0, patient: {}, screening: {}, tug: {}, balance: { times: [null, null, null, null] }, chair: {} });
   let state = load() || defaultState();
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => [...document.querySelectorAll(s)];
@@ -21,10 +21,12 @@
   function yesNo(v){ return v === 'yes' ? 'ใช่' : v === 'no' ? 'ไม่ใช่' : '-'; }
 
   function showStep(step){
-    state.step = Math.max(1, Math.min(6, step)); save();
+    state.step = Math.max(0, Math.min(6, step)); save();
     $$('.step').forEach(el => { const on=Number(el.dataset.step)===state.step; el.hidden=!on; el.classList.toggle('active',on); });
+    $('#progressBar').parentElement.hidden = state.step === 0;
+    $('#stepLabel').hidden = state.step === 0;
     $('#progressBar').style.width = `${state.step / 6 * 100}%`;
-    $('#stepLabel').textContent = `ขั้นตอนที่ ${state.step} จาก 6 · ${labels[state.step - 1]}`;
+    if(state.step > 0) $('#stepLabel').textContent = `ขั้นตอนที่ ${state.step} จาก 6 · ${labels[state.step - 1]}`;
     if(state.step === 4) renderBalance();
     if(state.step === 5) renderChair();
     if(state.step === 6) renderReport();
@@ -99,6 +101,8 @@
   $('#chairForm').addEventListener('submit',e=>{e.preventDefault();if($('#chairReps').value===''||Number($('#chairReps').value)<0){error('#chairError','กรุณากรอกจำนวนครั้งที่ทำได้');return;}error('#chairError','');save();showStep(6);});
   $$('[data-back]').forEach(b=>b.addEventListener('click',()=>showStep(state.step-1)));
   $('#printButton').addEventListener('click',()=>window.print());
-  $('#newButton').addEventListener('click',()=>{if(confirm('เริ่มการประเมินใหม่? ข้อมูลที่ยังไม่ได้พิมพ์จะถูกล้าง')){state=defaultState();try{localStorage.removeItem(KEY);}catch{}fillPatient();fillScreening();$('#tugTime').value='';showStep(1);}});
-  fillPatient(); fillScreening(); $('#tugTime').value=state.tug.time??''; updateTugStatus(); showStep(state.step||1);
+  $('#newButton').addEventListener('click',()=>{if(confirm('กลับไปยังหน้า Home และเริ่มการประเมินใหม่? ข้อมูลที่ยังไม่ได้พิมพ์จะถูกล้าง')){state=defaultState();try{localStorage.removeItem(KEY);}catch{}fillPatient();fillScreening();$('#tugTime').value='';showStep(0);}});
+  $('#startScreening').addEventListener('click',()=>{state=defaultState();fillPatient();fillScreening();$('#tugTime').value='';showStep(1);});
+  $$('[data-future-module]').forEach(button=>button.addEventListener('click',()=>{$('#moduleMessage').textContent=`โมดูล “${button.dataset.futureModule}” อยู่ระหว่างพัฒนา`; }));
+  fillPatient(); fillScreening(); $('#tugTime').value=state.tug.time??''; updateTugStatus(); showStep(0);
 })();
