@@ -43,8 +43,21 @@
         <button id="startHomeSafety" class="module-card active-module" type="button"><span class="module-icon">🏠</span><span class="module-text"><b>ประเมินบ้านเสี่ยงล้ม</b><small>ตรวจสภาพแวดล้อมและจุดเสี่ยงภายในบ้าน</small></span><span class="module-arrow">→</span></button>
         <button id="startFactorRisk" class="module-card active-module" type="button"><span class="module-icon">⚠️</span><span class="module-text"><b>ประเมินปัจจัยเสี่ยงภายในและภายนอก</b><small>สุขภาพ ยา การมองเห็น และสภาพแวดล้อม</small></span><span class="module-arrow">→</span></button>
         <button class="module-card" type="button" data-future-module="การทรงตัวอย่างละเอียด (Mini-BESTest)"><span class="module-icon">⚖️</span><span class="module-text"><b>การทรงตัวอย่างละเอียด</b><small>Mini-BESTest</small></span><span class="module-tag">เร็ว ๆ นี้</span></button>
+        <button id="startSarcF" class="module-card active-module" type="button"><span class="module-icon">🦵</span><span class="module-text"><b>ประเมินภาวะมวลกล้ามเนื้อน้อย</b><small>SARC-F และเส้นรอบวงน่อง</small></span><span class="module-arrow">→</span></button>
       </div>
       <p id="moduleMessage" class="home-message" role="status"></p>
+    </section>
+
+    <section class="step" data-step="9" hidden>
+      <div class="section-heading"><span>🦵</span><div><h2>ประเมินภาวะมวลกล้ามเนื้อน้อย</h2><p>คัดกรองด้วย SARC-F และเส้นรอบวงน่อง (SARC-CalF)</p></div></div>
+      <form id="sarcForm" novalidate>
+        <div id="sarcQuestions" class="factor-questions"></div>
+        <article class="factor-card"><h3 class="factor-heading"><span class="factor-icon" aria-hidden="true">◯</span><span>6. เส้นรอบวงน่อง</span></h3><div class="field-grid"><fieldset><legend>เพศ *</legend><div class="choice-row"><label class="choice"><input type="radio" name="sarcGender" value="male"> ชาย</label><label class="choice"><input type="radio" name="sarcGender" value="female"> หญิง</label></div></fieldset><label>เส้นรอบวงน่อง (เซนติเมตร) *<input id="calfCircumference" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="เช่น 33.5"></label></div><p class="hint">ผ่านเกณฑ์: ชาย ≥ 34 ซม. / หญิง ≥ 33 ซม. หากไม่ผ่านเกณฑ์ เพิ่ม 10 คะแนน</p></article>
+        <p id="sarcError" class="form-error" role="alert"></p>
+        <div id="sarcResult" class="home-result" hidden aria-live="polite"></div>
+        <div class="actions"><button class="secondary" type="button" id="sarcBackHome">← กลับหน้า Home</button><button class="primary" type="submit">สรุปผล SARC-CalF →</button></div>
+      </form>
+      <p class="disclaimer">อ้างอิงรูปแบบคัดกรอง SARC-F และเส้นรอบวงน่องตามเอกสารตัวอย่างที่ให้มา ควรใช้ร่วมกับการประเมินโดยบุคลากรสุขภาพ</p>
     </section>
 
     <section class="step" data-step="8" hidden>

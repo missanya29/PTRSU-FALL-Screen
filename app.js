@@ -8,7 +8,7 @@
   const stages = [
     ['Feet Together', 'ยืนเท้าชิดกัน'], ['Semi-tandem', 'ยืนกึ่งต่อเท้า'], ['Tandem', 'ยืนต่อเท้า'], ['Single Leg Stand', 'ยืนขาข้างเดียว']
   ];
-  const labels = ['ข้อมูลผู้รับการประเมิน', 'คัดกรองความเสี่ยงการหกล้ม', 'Timed Up and Go Test', '4-Stage Balance Test', '30-Second Chair Stand Test', 'สรุปผลการประเมิน', 'ประเมินสภาพบ้านเสี่ยงล้ม', 'ประเมินปัจจัยเสี่ยงภายในและภายนอก'];
+  const labels = ['ข้อมูลผู้รับการประเมิน', 'คัดกรองความเสี่ยงการหกล้ม', 'Timed Up and Go Test', '4-Stage Balance Test', '30-Second Chair Stand Test', 'สรุปผลการประเมิน', 'ประเมินสภาพบ้านเสี่ยงล้ม', 'ประเมินปัจจัยเสี่ยงภายในและภายนอก', 'ประเมินภาวะมวลกล้ามเนื้อน้อย'];
 
   // Local Storage is unavailable in some browsers when this app is opened as file:///.
   // The assessment must still work in that situation; it simply will not survive a refresh.
@@ -21,10 +21,10 @@
   function yesNo(v){ return v === 'yes' ? 'ใช่' : v === 'no' ? 'ไม่ใช่' : '-'; }
 
   function showStep(step){
-    state.step = Math.max(0, Math.min(8, step)); save();
+    state.step = Math.max(0, Math.min(9, step)); save();
     $$('.step').forEach(el => { const on=Number(el.dataset.step)===state.step; el.hidden=!on; el.classList.toggle('active',on); });
-    $('#progressBar').parentElement.hidden = state.step === 0 || state.step === 7 || state.step === 8;
-    $('#stepLabel').hidden = state.step === 0 || state.step === 7 || state.step === 8;
+    $('#progressBar').parentElement.hidden = state.step === 0 || state.step >= 7;
+    $('#stepLabel').hidden = state.step === 0 || state.step >= 7;
     $('#progressBar').style.width = `${state.step / 6 * 100}%`;
     if(state.step > 0 && state.step <= 6) $('#stepLabel').textContent = `ขั้นตอนที่ ${state.step} จาก 6 · ${labels[state.step - 1]}`;
     if(state.step === 4) renderBalance();
@@ -137,6 +137,17 @@
   $('#startFactorRisk').addEventListener('click',()=>{ renderFactorQuestions(); $('#factorResult').hidden=true; error('#factorError',''); showStep(8); });
   $('#factorBackHome').addEventListener('click',()=>showStep(0));
   $('#factorRiskForm').addEventListener('submit',e=>{ e.preventDefault(); const scores=factorItems.map((_,index)=>radio(`factor${index}`)); if(scores.some(score=>score==='')){error('#factorError','กรุณาเลือกคำตอบให้ครบทั้ง 11 ข้อ');return;} error('#factorError',''); const total=scores.reduce((sum,score)=>sum+Number(score),0); let title,detail,color; if(total<=10){title='ความเสี่ยงล้มระดับต่ำ';detail='คะแนนรวม 0–10 คะแนน';color='house-green';}else if(total<=20){title='ความเสี่ยงล้มระดับปานกลาง';detail='คะแนนรวม 11–20 คะแนน';color='house-yellow';}else{title='ความเสี่ยงล้มระดับสูง';detail='คะแนนรวม 21–33 คะแนน';color='house-red';} state.factorRisk={scores,total};save();const result=$('#factorResult');result.className=`home-result ${color}`;result.innerHTML=`<h3>${title}</h3><p>คะแนนรวม <b>${total} / 33 คะแนน</b></p><p>${detail}</p>`;result.hidden=false;result.scrollIntoView({behavior:'smooth',block:'center'}); });
+  const sarcItems=[
+    ['การยกและเคลื่อนย้ายสิ่งของน้ำหนัก 20 กิโลกรัม',['ไม่ยาก','ยากเล็กน้อย','ยาก']],
+    ['การเดินภายในห้องหรือภายในบ้าน',['ไม่ยาก','ยากเล็กน้อย','ยาก']],
+    ['การลุกยืนจากเก้าอี้หรือเตียงนอน',['ไม่ยาก','ยากเล็กน้อย','ยาก']],
+    ['การขึ้นบันได 10 ขั้น',['ไม่ยาก','ยากเล็กน้อย','ยาก']],
+    ['ประวัติการหกล้มภายใน 1 ปีที่ผ่านมา',['ไม่เคย','1–3 ครั้ง','ตั้งแต่ 4 ครั้งขึ้นไป']]
+  ];
+  function renderSarcQuestions(){ $('#sarcQuestions').innerHTML=sarcItems.map(([title,options],index)=>`<article class="factor-card"><h3 class="factor-heading"><span class="factor-icon" aria-hidden="true">${['↗','🚶','↑','▱','⚡'][index]}</span><span>${index+1}. ${title}</span></h3><div class="factor-options">${options.map((text,score)=>`<label class="factor-option"><input type="radio" name="sarc${index}" value="${score}"><span class="factor-score">${score}</span><span>${text} (${score} คะแนน)</span></label>`).join('')}</div></article>`).join(''); }
+  $('#startSarcF').addEventListener('click',()=>{renderSarcQuestions();$('#sarcForm').reset();$('#sarcResult').hidden=true;error('#sarcError','');showStep(9);});
+  $('#sarcBackHome').addEventListener('click',()=>showStep(0));
+  $('#sarcForm').addEventListener('submit',e=>{e.preventDefault();const scores=sarcItems.map((_,index)=>radio(`sarc${index}`));const gender=radio('sarcGender');const calf=Number($('#calfCircumference').value);if(scores.some(x=>x==='')||!gender||$('#calfCircumference').value===''){error('#sarcError','กรุณาเลือกคำตอบให้ครบทั้ง 5 ข้อ ระบุเพศ และเส้นรอบวงน่อง');return;}error('#sarcError','');const sarcTotal=scores.reduce((sum,x)=>sum+Number(x),0);const cutoff=gender==='male'?34:33;const calfPass=calf>=cutoff;const sarcCalfTotal=sarcTotal+(calfPass?0:10);const lowRisk=sarcTotal<4&&calfPass;const result=$('#sarcResult');const color=lowRisk?'house-green':'house-red';const title=lowRisk?'ไม่พบความเสี่ยงต่อภาวะมวลกล้ามเนื้อน้อย':'ต้องสงสัยภาวะมวลกล้ามเนื้อน้อย';const advice=lowRisk?'แนะนำประเมินซ้ำใน 3 เดือน':'ควรได้รับการประเมินยืนยันและวางแผนดูแลโดยบุคลากรสุขภาพ';state.sarc={scores,sarcTotal,gender,calf,calfPass,sarcCalfTotal};save();result.className=`home-result ${color}`;result.innerHTML=`<h3>${title}</h3><p>SARC-F <b>${sarcTotal} / 10 คะแนน</b> · เส้นรอบวงน่อง ${calf.toFixed(1)} ซม. (${calfPass?'ผ่านเกณฑ์':'ไม่ผ่านเกณฑ์'})</p><p>SARC-CalF รวม <b>${sarcCalfTotal} / 20 คะแนน</b></p><p>${advice}</p>`;result.hidden=false;result.scrollIntoView({behavior:'smooth',block:'center'});});
   $$('[data-future-module]').forEach(button=>button.addEventListener('click',()=>{$('#moduleMessage').textContent=`โมดูล “${button.dataset.futureModule}” อยู่ระหว่างพัฒนา`; }));
   fillPatient(); fillScreening(); $('#tugTime').value=state.tug.time??''; updateTugStatus(); showStep(0);
 })();
