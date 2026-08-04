@@ -8,7 +8,7 @@
   const stages = [
     ['Feet Together', 'ยืนเท้าชิดกัน'], ['Semi-tandem', 'ยืนกึ่งต่อเท้า'], ['Tandem', 'ยืนต่อเท้า'], ['Single Leg Stand', 'ยืนขาข้างเดียว']
   ];
-  const labels = ['ข้อมูลผู้รับการประเมิน', 'คัดกรองความเสี่ยงการหกล้ม', 'Timed Up and Go Test', '4-Stage Balance Test', '30-Second Chair Stand Test', 'สรุปผลการประเมิน'];
+  const labels = ['ข้อมูลผู้รับการประเมิน', 'คัดกรองความเสี่ยงการหกล้ม', 'Timed Up and Go Test', '4-Stage Balance Test', '30-Second Chair Stand Test', 'สรุปผลการประเมิน', 'ประเมินสภาพบ้านเสี่ยงล้ม'];
 
   // Local Storage is unavailable in some browsers when this app is opened as file:///.
   // The assessment must still work in that situation; it simply will not survive a refresh.
@@ -21,12 +21,12 @@
   function yesNo(v){ return v === 'yes' ? 'ใช่' : v === 'no' ? 'ไม่ใช่' : '-'; }
 
   function showStep(step){
-    state.step = Math.max(0, Math.min(6, step)); save();
+    state.step = Math.max(0, Math.min(7, step)); save();
     $$('.step').forEach(el => { const on=Number(el.dataset.step)===state.step; el.hidden=!on; el.classList.toggle('active',on); });
-    $('#progressBar').parentElement.hidden = state.step === 0;
-    $('#stepLabel').hidden = state.step === 0;
+    $('#progressBar').parentElement.hidden = state.step === 0 || state.step === 7;
+    $('#stepLabel').hidden = state.step === 0 || state.step === 7;
     $('#progressBar').style.width = `${state.step / 6 * 100}%`;
-    if(state.step > 0) $('#stepLabel').textContent = `ขั้นตอนที่ ${state.step} จาก 6 · ${labels[state.step - 1]}`;
+    if(state.step > 0 && state.step <= 6) $('#stepLabel').textContent = `ขั้นตอนที่ ${state.step} จาก 6 · ${labels[state.step - 1]}`;
     if(state.step === 4) renderBalance();
     if(state.step === 5) renderChair();
     if(state.step === 6) renderReport();
@@ -103,6 +103,9 @@
   $('#printButton').addEventListener('click',()=>window.print());
   $('#newButton').addEventListener('click',()=>{if(confirm('กลับไปยังหน้า Home และเริ่มการประเมินใหม่? ข้อมูลที่ยังไม่ได้พิมพ์จะถูกล้าง')){state=defaultState();try{localStorage.removeItem(KEY);}catch{}fillPatient();fillScreening();$('#tugTime').value='';showStep(0);}});
   $('#startScreening').addEventListener('click',()=>{state=defaultState();fillPatient();fillScreening();$('#tugTime').value='';showStep(1);});
+  $('#startHomeSafety').addEventListener('click',()=>{ $('#homeSafetyForm').reset(); $('#homeSafetyResult').hidden=true; showStep(7); });
+  $('#backHome').addEventListener('click',()=>showStep(0));
+  $('#homeSafetyForm').addEventListener('submit',e=>{ e.preventDefault(); const count=$$('input[name="homeRisk"]:checked').length; const result=$('#homeSafetyResult'); let level, advice, color; if(count<=2){level='🏠 บ้านควรระวัง'; advice='พบจุดเสี่ยงไม่เกิน 2 ข้อ ควรติดตามและปรับปรุงจุดเสี่ยงที่พบเพื่อป้องกันการหกล้ม'; color='house-green';}else if(count<=4){level='🏠 บ้านควรแก้ไข'; advice='พบจุดเสี่ยง 3–4 ข้อ ควรวางแผนแก้ไขจุดเสี่ยงภายในบ้าน'; color='house-yellow';}else{level='🏠 บ้านอันตราย แก้ไขด่วน'; advice='พบจุดเสี่ยงตั้งแต่ 5 ข้อขึ้นไป ควรเร่งแก้ไขและปรับสภาพแวดล้อมเพื่อความปลอดภัย'; color='house-red';} result.className=`home-result ${color}`; result.innerHTML=`<h3>${level}</h3><p>พบจุดเสี่ยงทั้งหมด <b>${count} ข้อ</b></p><p>${advice}</p>`; result.hidden=false; result.scrollIntoView({behavior:'smooth',block:'center'}); });
   $$('[data-future-module]').forEach(button=>button.addEventListener('click',()=>{$('#moduleMessage').textContent=`โมดูล “${button.dataset.futureModule}” อยู่ระหว่างพัฒนา`; }));
   fillPatient(); fillScreening(); $('#tugTime').value=state.tug.time??''; updateTugStatus(); showStep(0);
 })();

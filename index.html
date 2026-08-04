@@ -7,7 +7,7 @@
   <title>PTRSU FALL Screen</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .home-hero{text-align:center;padding:10px 0 27px}.home-icon{font-size:3rem}.home-hero h2{margin:5px 0;color:#824573}.home-hero p{margin:0;color:#756875}.module-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.module-card{display:flex;align-items:center;gap:14px;width:100%;min-height:112px;text-align:left;padding:18px;background:#fff9fd;color:#473747;border:1px solid #ecd9e9}.module-card:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(159,81,144,.14)}.active-module{background:linear-gradient(135deg,#fff2fa,#f4ecff);border-color:#c66fae}.module-icon{font-size:2rem}.module-text{display:grid;gap:3px;flex:1}.module-text b{font-size:1.05rem;color:#824573}.module-text small{font-weight:400;color:#756875}.module-arrow{font-size:1.5rem;color:#a35b96}.module-tag{padding:4px 8px;background:#eee7ef;color:#756875;border-radius:99px;font-size:.75rem}.home-message{min-height:1.5em;text-align:center;color:#824573;font-weight:700;margin:20px 0 0}@media(max-width:640px){.module-grid{grid-template-columns:1fr}}
+    .home-hero{text-align:center;padding:10px 0 27px}.home-icon{font-size:3rem}.home-hero h2{margin:5px 0;color:#824573}.home-hero p{margin:0;color:#756875}.module-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.module-card{display:flex;align-items:center;gap:14px;width:100%;min-height:112px;text-align:left;padding:18px;background:#fff9fd;color:#473747;border:1px solid #ecd9e9}.module-card:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(159,81,144,.14)}.active-module{background:linear-gradient(135deg,#fff2fa,#f4ecff);border-color:#c66fae}.module-icon{font-size:2rem}.module-text{display:grid;gap:3px;flex:1}.module-text b{font-size:1.05rem;color:#824573}.module-text small{font-weight:400;color:#756875}.module-arrow{font-size:1.5rem;color:#a35b96}.module-tag{padding:4px 8px;background:#eee7ef;color:#756875;border-radius:99px;font-size:.75rem}.home-message{min-height:1.5em;text-align:center;color:#824573;font-weight:700;margin:20px 0 0}.checklist{display:grid;gap:12px}.risk-item{display:flex;align-items:flex-start;gap:12px;padding:16px;border:1px solid #ecd9e9;border-radius:15px;background:#fff9fd;cursor:pointer}.risk-item:has(input:checked){background:#fff0fa;border-color:#c66fae}.risk-item input{width:20px;height:20px;margin:3px 0 0;accent-color:#c66fae}.risk-item b{display:block;color:#824573;margin-bottom:3px}.risk-item span{color:#645565}.home-result{margin-top:20px;padding:22px;border-radius:18px;text-align:center}.home-result h3{margin:0;font-size:1.45rem}.home-result p{margin:7px 0 0}.house-green{background:#e2f5e9;color:#207848}.house-yellow{background:#fff2cf;color:#926100}.house-red{background:#fde0e5;color:#a22645}@media(max-width:640px){.module-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -31,11 +31,33 @@
       </div>
       <div class="module-grid">
         <button id="startScreening" class="module-card active-module" type="button"><span class="module-icon">📋</span><span class="module-text"><b>คัดกรองความเสี่ยงล้ม</b><small>ประวัติการล้ม การเดิน การทรงตัว และ Chair Stand</small></span><span class="module-arrow">→</span></button>
-        <button class="module-card" type="button" data-future-module="ประเมินบ้านเสี่ยงล้ม"><span class="module-icon">🏠</span><span class="module-text"><b>ประเมินบ้านเสี่ยงล้ม</b><small>ตรวจสภาพแวดล้อมและจุดเสี่ยงภายในบ้าน</small></span><span class="module-tag">เร็ว ๆ นี้</span></button>
+        <button id="startHomeSafety" class="module-card active-module" type="button"><span class="module-icon">🏠</span><span class="module-text"><b>ประเมินบ้านเสี่ยงล้ม</b><small>ตรวจสภาพแวดล้อมและจุดเสี่ยงภายในบ้าน</small></span><span class="module-arrow">→</span></button>
         <button class="module-card" type="button" data-future-module="ประเมินเสี่ยงล้มจากปัจจัยภายในและภายนอก"><span class="module-icon">⚠️</span><span class="module-text"><b>ประเมินปัจจัยเสี่ยงภายในและภายนอก</b><small>สุขภาพ ยา การมองเห็น และสภาพแวดล้อม</small></span><span class="module-tag">เร็ว ๆ นี้</span></button>
         <button class="module-card" type="button" data-future-module="การทรงตัวอย่างละเอียด (Mini-BESTest)"><span class="module-icon">⚖️</span><span class="module-text"><b>การทรงตัวอย่างละเอียด</b><small>Mini-BESTest</small></span><span class="module-tag">เร็ว ๆ นี้</span></button>
       </div>
       <p id="moduleMessage" class="home-message" role="status"></p>
+    </section>
+
+    <section class="step" data-step="7" hidden>
+      <div class="section-heading"><span>🏠</span><div><h2>ประเมินสภาพบ้านเสี่ยงล้ม</h2><p>ทำเครื่องหมาย ✓ ในข้อที่พบความเสี่ยงภายในหรือรอบบ้าน</p></div></div>
+      <form id="homeSafetyForm">
+        <div class="checklist">
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>1. พื้นผิวลื่น หรือมีสิ่งปูพื้นที่ไม่ยึดแน่น</b>เช่น เสื่อน้ำมัน กระเบื้องลื่น พื้นหินขัด พรม เสื่อ ผ้า หรือมีน้ำบนพื้น</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>2. มีสิ่งของหรือสายไฟกีดขวาง</b>กีดขวางทางเดินหรือบันได เสี่ยงต่อการเดินชนหรือสะดุดล้ม</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>3. ของใช้หรือเฟอร์นิเจอร์สูง/ต่ำไม่เหมาะสม</b>ทำให้ต้องก้ม เอื้อม ปีน เขย่ง หรือย่อตัวมากขณะนั่งลง</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>4. สีและลวดลายทำให้มองเห็นไม่ชัด</b>สีพื้นกับสิ่งของหรือขอบบันไดใกล้เคียงกัน หรือพื้นมีลายที่ทำให้ลายตา</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>5. แสงสว่างไม่เพียงพอ</b>ไม่มีไฟบริเวณทางเดิน หรือไม่มีไฟฉาย/โคมไฟข้างเตียงในเวลากลางคืน</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>6. มีการเปลี่ยนระดับแสงอย่างมาก</b>เช่น จากที่มืดมากไปสู่แสงจ้า จนสายตาปรับไม่ทัน</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>7. ไม่มีราวจับที่แข็งแรง</b>ไม่มีราวจับที่บันได หรือในห้องน้ำบริเวณอาบน้ำและโถส้วม</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>8. ห้องนอนอยู่ชั้น 2</b>ต้องขึ้นลงบันไดเป็นประจำ</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>9. มีธรณีประตู พื้นต่างระดับ หรือพื้นไม่เรียบ</b>ทำให้ต้องเปลี่ยนระดับทางเดิน</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>10. การระบายอากาศไม่ดี</b>มีความอับชื้นหรือความชื้นสะสม</span></label>
+          <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>11. ทางเข้าหรือพื้นที่ภายนอกบ้านมีสิ่งกีดขวาง</b>เช่น รองเท้า สายยางรดน้ำ หรือสิ่งของวางกีดขวาง</span></label>
+        </div>
+        <div id="homeSafetyResult" class="home-result" hidden aria-live="polite"></div>
+        <div class="actions"><button class="secondary" type="button" id="backHome">← กลับหน้า Home</button><button class="primary" type="submit">สรุปผลการประเมินบ้าน →</button></div>
+      </form>
+      <p class="disclaimer">ปรับปรุงเพิ่มเติมจาก “บ้านปลอดภัยไม่เสี่ยงล้ม” โดยชุมเขต แสงวงเจริญ ศูนย์ออกแบบสภาพแวดล้อมเพื่อทุกคน มหาวิทยาลัยธรรมศาสตร์ และกรมกิจการผู้สูงอายุ (2563)</p>
     </section>
 
     <section class="step active" data-step="1">
