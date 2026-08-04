@@ -1,100 +1,128 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#b75d9f">
-  <title>RSU FALL Screen</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .home-hero{text-align:center;padding:10px 0 27px}.home-icon{font-size:3rem}.home-hero h2{margin:5px 0;color:#824573}.home-hero p{margin:0;color:#756875}.module-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.module-card{display:flex;align-items:center;gap:14px;width:100%;min-height:112px;text-align:left;padding:18px;background:#fff9fd;color:#473747;border:1px solid #ecd9e9}.module-card:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(159,81,144,.14)}.active-module{background:linear-gradient(135deg,#fff2fa,#f4ecff);border-color:#c66fae}.module-icon{font-size:2rem}.module-text{display:grid;gap:3px;flex:1}.module-text b{font-size:1.05rem;color:#824573}.module-text small{font-weight:400;color:#756875}.module-arrow{font-size:1.5rem;color:#a35b96}.module-tag{padding:4px 8px;background:#eee7ef;color:#756875;border-radius:99px;font-size:.75rem}.home-message{min-height:1.5em;text-align:center;color:#824573;font-weight:700;margin:20px 0 0}@media(max-width:640px){.module-grid{grid-template-columns:1fr}}
-  </style>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RSU FALL Screen</title>
+
+    <link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
-  <main class="app-shell">
-    <header class="app-header">
-      <div class="brand-mark" aria-hidden="true">RSU</div>
-      <div>
-        <h1>RSU FALL Screen</h1>
-        <p>ระบบประเมินความเสี่ยงการหกล้ม</p>
-      </div>
-    </header>
 
-    <div class="progress-wrap" aria-label="ความคืบหน้า"><div id="progressBar" class="progress-bar"></div></div>
-    <p id="stepLabel" class="step-label">ขั้นตอนที่ 1 จาก 6 · ข้อมูลผู้รับการประเมิน</p>
+<div class="container">
 
-    <section class="step home-step" data-step="0" hidden>
-      <div class="home-hero">
-        <span class="home-icon">🩺</span>
-        <h2>เลือกเมนูการประเมิน</h2>
-        <p>RSU FALL Screen สำหรับคัดกรองและประเมินความเสี่ยงการหกล้ม</p>
-      </div>
-      <div class="module-grid">
-        <button id="startScreening" class="module-card active-module" type="button"><span class="module-icon">📋</span><span class="module-text"><b>คัดกรองความเสี่ยงล้ม</b><small>ประวัติการล้ม การเดิน การทรงตัว และ Chair Stand</small></span><span class="module-arrow">→</span></button>
-        <button class="module-card" type="button" data-future-module="ประเมินบ้านเสี่ยงล้ม"><span class="module-icon">🏠</span><span class="module-text"><b>ประเมินบ้านเสี่ยงล้ม</b><small>ตรวจสภาพแวดล้อมและจุดเสี่ยงภายในบ้าน</small></span><span class="module-tag">เร็ว ๆ นี้</span></button>
-        <button class="module-card" type="button" data-future-module="ประเมินเสี่ยงล้มจากปัจจัยภายในและภายนอก"><span class="module-icon">⚠️</span><span class="module-text"><b>ประเมินปัจจัยเสี่ยงภายในและภายนอก</b><small>สุขภาพ ยา การมองเห็น และสภาพแวดล้อม</small></span><span class="module-tag">เร็ว ๆ นี้</span></button>
-        <button class="module-card" type="button" data-future-module="การทรงตัวอย่างละเอียด (Mini-BESTest)"><span class="module-icon">⚖️</span><span class="module-text"><b>การทรงตัวอย่างละเอียด</b><small>Mini-BESTest</small></span><span class="module-tag">เร็ว ๆ นี้</span></button>
-      </div>
-      <p id="moduleMessage" class="home-message" role="status"></p>
-    </section>
+    <div class="header">
 
-    <section class="step active" data-step="1">
-      <div class="section-heading"><span>👤</span><div><h2>ข้อมูลผู้รับการประเมิน</h2><p>ช่องที่มี * จำเป็นต้องกรอก</p></div></div>
-      <form id="patientForm" novalidate>
-        <div class="field-grid">
-          <label>ชื่อ-นามสกุล *<input id="patientName" type="text" autocomplete="name" required></label>
-          <label>อายุ (ปี) *<input id="age" type="number" min="0" max="120" inputmode="numeric" required></label>
-        </div>
-        <fieldset><legend>เพศ *</legend><div class="choice-row"><label class="choice"><input type="radio" name="gender" value="male"> ชาย</label><label class="choice"><input type="radio" name="gender" value="female"> หญิง</label></div></fieldset>
-        <div class="field-grid">
-          <label>วันที่ประเมิน *<input id="assessmentDate" type="date" required></label>
-          <label>ผู้ประเมิน *<input id="assessor" type="text" required></label>
-        </div>
-        <label>หมายเหตุ <textarea id="note" rows="4" placeholder="เช่น โรคประจำตัว ยาที่ใช้ หรือข้อมูลสำคัญ"></textarea></label>
-        <p id="patientError" class="form-error" role="alert"></p>
-        <div class="actions actions-end"><button class="primary" type="submit">ถัดไป <span>→</span></button></div>
-      </form>
-    </section>
+        <img src="images/header-logo.png" class="logo">
 
-    <section class="step" data-step="2" hidden>
-      <div class="section-heading"><span>📋</span><div><h2>คัดกรองความเสี่ยงเบื้องต้น</h2><p>ตอบตามข้อมูลในช่วง 12 เดือนที่ผ่านมา</p></div></div>
-      <form id="screeningForm" novalidate>
-        <article class="card"><h3>1. เคยหกล้มในปีที่ผ่านมา หรือไม่?</h3><div class="choice-row"><label class="choice"><input type="radio" name="fallHistory" value="yes"> ใช่</label><label class="choice"><input type="radio" name="fallHistory" value="no"> ไม่</label></div>
-          <div id="fallDetails" class="sub-card" hidden>
-            <h4>รายละเอียดการหกล้ม</h4>
-            <p class="mini-label">จำนวนครั้งที่หกล้ม</p><div class="choice-row"><label class="choice"><input type="radio" name="fallCount" value="1"> 1 ครั้ง</label><label class="choice"><input type="radio" name="fallCount" value="2"> 2 ครั้งขึ้นไป</label></div>
-            <p class="mini-label">การหกล้มครั้งล่าสุดได้รับบาดเจ็บหรือไม่?</p><div class="choice-row"><label class="choice"><input type="radio" name="injury" value="no"> ไม่บาดเจ็บ</label><label class="choice"><input type="radio" name="injury" value="yes"> บาดเจ็บ</label></div>
-          </div>
-        </article>
-        <article class="card"><h3>2. บางครั้งรู้สึกไม่มั่นคง (เซ) เมื่อเดิน ใช่หรือไม่?</h3><div class="choice-row"><label class="choice"><input type="radio" name="unsteady" value="yes"> ใช่</label><label class="choice"><input type="radio" name="unsteady" value="no"> ไม่ใช่</label></div></article>
-        <article class="card"><h3>3. กังวล หรือกลัวเรื่องการล้ม ใช่หรือไม่?</h3><div class="choice-row"><label class="choice"><input type="radio" name="fear" value="yes"> ใช่</label><label class="choice"><input type="radio" name="fear" value="no"> ไม่ใช่</label></div></article>
-        <p id="screeningError" class="form-error" role="alert"></p>
-        <div class="actions"><button class="secondary" type="button" data-back>← ย้อนกลับ</button><button class="primary" type="submit">ประเมินต่อ →</button></div>
-      </form>
-    </section>
+        <h1>PTRSU FALL Screen</h1>
 
-    <section class="step" data-step="3" hidden>
-      <div class="section-heading"><span>🚶</span><div><h2>Timed Up and Go Test (TUG)</h2><p>ลุกจากเก้าอี้ เดิน 3 เมตร หมุนตัว เดินกลับ และนั่งลง</p></div></div>
-      <form id="tugForm" novalidate><article class="card"><label>เวลาที่ใช้ (วินาที) *<input id="tugTime" type="number" min="0" max="300" step="0.01" inputmode="decimal" placeholder="เช่น 11.35" required></label><div id="tugStatus" class="status neutral">กรอกเวลาเพื่อแปลผลอัตโนมัติ</div><p class="hint">เกณฑ์: ≤ 13.5 วินาที = ผ่านเกณฑ์</p></article><p id="tugError" class="form-error" role="alert"></p><div class="actions"><button class="secondary" type="button" data-back>← ย้อนกลับ</button><button class="primary" type="submit">ถัดไป →</button></div></form>
-    </section>
+        <h2>Fall Risk Assessment System</h2>
 
-    <section class="step" data-step="4" hidden>
-      <div class="section-heading"><span>⚖️</span><div><h2>4-Stage Balance Test</h2><p>ยืนให้ได้ 10 วินาทีทุกท่า หากทำไม่ถึง 10 วินาที ให้หยุดการทดสอบ</p></div></div>
-      <form id="balanceForm" novalidate><div id="balanceStages"></div><p id="balanceSummary" class="status neutral">เริ่มกรอกเวลาของท่าที่ 1</p><p id="balanceError" class="form-error" role="alert"></p><div class="actions"><button class="secondary" type="button" data-back>← ย้อนกลับ</button><button class="primary" type="submit">ถัดไป →</button></div></form>
-    </section>
+        <p>ระบบประเมินความเสี่ยงการหกล้มในผู้สูงอายุ</p>
 
-    <section class="step" data-step="5" hidden>
-      <div class="section-heading"><span>🪑</span><div><h2>30-Second Chair Stand Test</h2><p>จำนวนครั้งที่ลุกยืนเต็มตัวและนั่งลง ภายใน 30 วินาที</p></div></div>
-      <form id="chairForm" novalidate><article class="card"><label>จำนวนครั้งที่ทำได้ *<input id="chairReps" type="number" min="0" max="100" step="1" inputmode="numeric" placeholder="เช่น 12" required></label><div id="chairStatus" class="status neutral">ระบบจะใช้เกณฑ์ตามอายุและเพศที่กรอกไว้</div><p id="chairCriterion" class="hint"></p></article><p id="chairError" class="form-error" role="alert"></p><div class="actions"><button class="secondary" type="button" data-back>← ย้อนกลับ</button><button class="primary" type="submit">ดูผลการประเมิน →</button></div></form>
-    </section>
+    </div>
 
-    <section class="step" data-step="6" hidden>
-      <div class="section-heading"><span>🩺</span><div><h2>สรุปผลการประเมิน</h2><p>ผลคัดกรองเพื่อช่วยการตัดสินใจทางคลินิก</p></div></div>
-      <div id="report" class="report"></div>
-      <p class="disclaimer">เครื่องมือนี้ใช้เพื่อการคัดกรอง ไม่ทดแทนการวินิจฉัยหรือการตัดสินใจของบุคลากรทางการแพทย์</p>
-      <div class="actions print-hide"><button class="secondary" type="button" data-back>← แก้ไขข้อมูล</button><button id="printButton" class="primary" type="button">🖨 พิมพ์รายงาน</button><button id="newButton" class="outline" type="button">เริ่มประเมินใหม่</button></div>
-    </section>
-  </main>
-  <script src="app.js"></script>
+    <div class="progress">
+
+        ขั้นตอนที่ 1 จาก 6 : ข้อมูลผู้รับการประเมิน
+
+    </div>
+
+    <div class="section-title">
+
+        👤 ข้อมูลผู้รับการประเมิน
+
+    </div>
+
+<form action="screening.html">
+
+<label>
+
+ชื่อ - นามสกุล
+
+</label>
+
+<input type="text" placeholder="กรอกชื่อ - นามสกุล">
+
+<label>
+
+อายุ
+
+</label>
+
+<input type="number" placeholder="เช่น 72">
+
+<label>
+
+เพศ
+
+</label>
+
+<div class="radio-group">
+
+<label>
+
+<input type="radio" name="gender">
+
+ชาย
+
+</label>
+
+<label>
+
+<input type="radio" name="gender">
+
+หญิง
+
+</label>
+
+</div>
+
+<label>
+
+วันที่ประเมิน
+
+</label>
+
+<input type="date">
+
+<label>
+
+ผู้ประเมิน
+
+</label>
+
+<input type="text">
+
+<label>
+
+หมายเหตุ
+
+</label>
+
+<textarea rows="4"></textarea>
+
+<div class="button-group">
+
+<button type="submit" class="btn-next">
+
+ถัดไป ▶
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
 </body>
+
 </html>
