@@ -8,7 +8,7 @@
   const stages = [
     ['Feet Together', 'ยืนเท้าชิดกัน'], ['Semi-tandem', 'ยืนกึ่งต่อเท้า'], ['Tandem', 'ยืนต่อเท้า'], ['Single Leg Stand', 'ยืนขาข้างเดียว']
   ];
-  const labels = ['ข้อมูลผู้รับการประเมิน', 'คัดกรองความเสี่ยงการหกล้ม', 'Timed Up and Go Test', '4-Stage Balance Test', '30-Second Chair Stand Test', 'สรุปผลการประเมิน', 'ประเมินสภาพบ้านเสี่ยงล้ม'];
+  const labels = ['ข้อมูลผู้รับการประเมิน', 'คัดกรองความเสี่ยงการหกล้ม', 'Timed Up and Go Test', '4-Stage Balance Test', '30-Second Chair Stand Test', 'สรุปผลการประเมิน', 'ประเมินสภาพบ้านเสี่ยงล้ม', 'ประเมินปัจจัยเสี่ยงภายในและภายนอก'];
 
   // Local Storage is unavailable in some browsers when this app is opened as file:///.
   // The assessment must still work in that situation; it simply will not survive a refresh.
@@ -21,10 +21,10 @@
   function yesNo(v){ return v === 'yes' ? 'ใช่' : v === 'no' ? 'ไม่ใช่' : '-'; }
 
   function showStep(step){
-    state.step = Math.max(0, Math.min(7, step)); save();
+    state.step = Math.max(0, Math.min(8, step)); save();
     $$('.step').forEach(el => { const on=Number(el.dataset.step)===state.step; el.hidden=!on; el.classList.toggle('active',on); });
-    $('#progressBar').parentElement.hidden = state.step === 0 || state.step === 7;
-    $('#stepLabel').hidden = state.step === 0 || state.step === 7;
+    $('#progressBar').parentElement.hidden = state.step === 0 || state.step === 7 || state.step === 8;
+    $('#stepLabel').hidden = state.step === 0 || state.step === 7 || state.step === 8;
     $('#progressBar').style.width = `${state.step / 6 * 100}%`;
     if(state.step > 0 && state.step <= 6) $('#stepLabel').textContent = `ขั้นตอนที่ ${state.step} จาก 6 · ${labels[state.step - 1]}`;
     if(state.step === 4) renderBalance();
@@ -107,6 +107,36 @@
   $('#startHomeSafety').addEventListener('click',()=>{ $('#homeSafetyForm').reset(); $('#homeSafetyResult').hidden=true; showStep(7); });
   $('#backHome').addEventListener('click',()=>showStep(0));
   $('#homeSafetyForm').addEventListener('submit',e=>{ e.preventDefault(); const count=$$('input[name="homeRisk"]:checked').length; const result=$('#homeSafetyResult'); let level, advice, color; if(count<=2){level='🏠 บ้านควรระวัง'; advice='พบจุดเสี่ยงไม่เกิน 2 ข้อ ควรติดตามและปรับปรุงจุดเสี่ยงที่พบเพื่อป้องกันการหกล้ม'; color='house-green';}else if(count<=4){level='🏠 บ้านควรแก้ไข'; advice='พบจุดเสี่ยง 3–4 ข้อ ควรวางแผนแก้ไขจุดเสี่ยงภายในบ้าน'; color='house-yellow';}else{level='🏠 บ้านอันตราย แก้ไขด่วน'; advice='พบจุดเสี่ยงตั้งแต่ 5 ข้อขึ้นไป ควรเร่งแก้ไขและปรับสภาพแวดล้อมเพื่อความปลอดภัย'; color='house-red';} result.className=`home-result ${color}`; result.innerHTML=`<h3>${level}</h3><p>พบจุดเสี่ยงทั้งหมด <b>${count} ข้อ</b></p><p>${advice}</p>`; result.hidden=false; result.scrollIntoView({behavior:'smooth',block:'center'}); });
+  const factorItems=[
+    ['ประวัติการหกล้ม',['ไม่มีใน 1 ปีที่ผ่านมา','1 ครั้งใน 6 เดือนที่ผ่านมา','1 ครั้งใน 3 เดือนที่ผ่านมา','1 ครั้งในเดือนที่ผ่านมา หรือหลายครั้งใน 1 ปีที่ผ่านมา']],
+    ['อายุ',['0–19 ปี','20–59 ปี','60–70 ปี','มากกว่า 70 ปี']],
+    ['ยา',['ไม่ได้ทานยาที่เกี่ยวกับการรักษาหลอดเลือดและระบบประสาท','ทานยาที่เกี่ยวกับการรักษาหลอดเลือด หัวใจ หรือยาความดัน','ทานยาที่เกี่ยวกับระบบประสาท ยาซึมเศร้า ยานอนหลับ หรือยากล่อมประสาท','ทานยาที่เกี่ยวกับการรักษาหลอดเลือดและระบบประสาท หรือทานยา 4 ชนิด']],
+    ['การทรงตัว TUG',['น้อยกว่า 10 วินาที และไม่ต้องใช้อุปกรณ์ช่วยเดิน','น้อยกว่า 10 วินาที แต่ต้องใช้อุปกรณ์ช่วยเดิน','10–20 วินาที','มากกว่า 20 วินาที และ/หรือไม่สามารถทำได้ด้วยตนเอง']],
+    ['การรับรู้',['รู้เวลา สถานที่ บุคคล','รู้สถานที่ บุคคล','รู้บุคคล','ไม่รับรู้ หรือการตัดสินใจบกพร่อง']],
+    ['สารอาหารและการนอนหลับ',['อาหารเพียงพอ นอนหลับปกติ','ไม่เจริญอาหาร หรือนอนไม่ค่อยหลับ','นอนหลับยาก','ขาดสารอาหาร น้ำหนักลด หรือนอนไม่หลับ']],
+    ['การเจ็บเท้าและรองเท้า',['ไม่มีอาการปวดเท้าหรือภาวะนิ้วหัวแม่เท้าเอียง รองเท้าพอดีเท้า ส้นแบนหรือสูงน้อยกว่า 2.5 ซม. พื้นรองเท้าแน่น','ไม่มีอาการปวดเท้าหรือภาวะนิ้วหัวแม่เท้าเอียง แต่สวมรองเท้าแตะหรือรองเท้าที่ไม่เหมาะสมบางครั้ง','มีอาการปวดเท้าหรือภาวะนิ้วหัวแม่เท้าเอียงที่ไม่ส่งผลต่อการเดิน และสวมรองเท้าแตะหรือรองเท้าที่ไม่เหมาะสมบ่อยครั้ง','มีอาการปวดเท้าหรือภาวะนิ้วหัวแม่เท้าเอียงที่ส่งผลต่อการเดิน และสวมรองเท้าแตะหรือรองเท้าที่ไม่เหมาะสมบ่อยครั้ง']],
+    ['การมองเห็น',['ปกติ','ใช้แว่นตา','มองเห็นไม่ชัด/ตาต้อ','มองเห็นผิดปกติถึงขั้นตาบอด']],
+    ['การพูด',['ปกติ','มีปัญหาการพูดแต่เข้าใจภาษาดี','พูดไม่ชัด/มีปัญหาการสื่อสาร','สื่อสารบกพร่องขั้นรุนแรง']],
+    ['ควบคุมการขับถ่าย',['ไม่มีปัญหา','ปัสสาวะบ่อย','ปัสสาวะตอนกลางคืนและปัสสาวะเล็ด','ปัสสาวะราด']],
+    ['โรคเรื้อรัง',['ไม่มีโรค','มีโรคเรื้อรัง 1 โรค','มีโรคเรื้อรัง 2–3 โรค','มีโรคเรื้อรังหลายโรค (4 โรคขึ้นไป)']]
+  ];
+  const factorIcons=[
+    '<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v5l-3 3m3-3 4 2m-7 3-2 4m6-5 2 4"/></svg>',
+    '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4m8-4v4M7 11h10m-7 4h4"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="m10 4 8 8-6 6-8-8z"/><path d="m7 7 3-3 8 8"/></svg>',
+    '<svg viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v6m0-3 4 2m-4-2-3 3m-2 6 2-6m6 6-3-6"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M12 4a7 7 0 0 0-7 7c0 3 2 4 3 6h8c1-2 3-3 3-6a7 7 0 0 0-7-7Z"/><path d="M9 20h6m-5-3h4"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M20 15a8 8 0 1 1-9-11 7 7 0 0 0 9 11Z"/><path d="M17 5v3m-1.5-1.5h3"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M4 16c4-6 9-7 16-3l-3 5H7z"/><path d="M8 16v3m7-4v3"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M3 12s3-5 9-5 9 5 9 5-3 5-9 5-9-5-9-5Z"/><circle cx="12" cy="12" r="2.5"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M5 6h14v9H9l-4 3z"/><path d="M9 10h6m-6 3h4"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M7 4h10v16H7z"/><path d="M10 8h4m-4 4h4m-2 4h.01"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 6-7 10-7 10Z"/><path d="M12 7v6m-3-3h6"/></svg>'
+  ];
+  function renderFactorQuestions(){ $('#factorQuestions').innerHTML=factorItems.map(([title,options],index)=>`<article class="factor-card"><h3 class="factor-heading"><span class="factor-icon" aria-hidden="true">${factorIcons[index]}</span><span>${index+1}. ${title}</span></h3><div class="factor-options">${options.map((text,score)=>`<label class="factor-option"><input type="radio" name="factor${index}" value="${score}"><span class="factor-score">${score}</span><span>${text}</span></label>`).join('')}</div></article>`).join(''); }
+  $('#startFactorRisk').addEventListener('click',()=>{ renderFactorQuestions(); $('#factorResult').hidden=true; error('#factorError',''); showStep(8); });
+  $('#factorBackHome').addEventListener('click',()=>showStep(0));
+  $('#factorRiskForm').addEventListener('submit',e=>{ e.preventDefault(); const scores=factorItems.map((_,index)=>radio(`factor${index}`)); if(scores.some(score=>score==='')){error('#factorError','กรุณาเลือกคำตอบให้ครบทั้ง 11 ข้อ');return;} error('#factorError',''); const total=scores.reduce((sum,score)=>sum+Number(score),0); let title,detail,color; if(total<=10){title='ความเสี่ยงล้มระดับต่ำ';detail='คะแนนรวม 0–10 คะแนน';color='house-green';}else if(total<=20){title='ความเสี่ยงล้มระดับปานกลาง';detail='คะแนนรวม 11–20 คะแนน';color='house-yellow';}else{title='ความเสี่ยงล้มระดับสูง';detail='คะแนนรวม 21–33 คะแนน';color='house-red';} state.factorRisk={scores,total};save();const result=$('#factorResult');result.className=`home-result ${color}`;result.innerHTML=`<h3>${title}</h3><p>คะแนนรวม <b>${total} / 33 คะแนน</b></p><p>${detail}</p>`;result.hidden=false;result.scrollIntoView({behavior:'smooth',block:'center'}); });
   $$('[data-future-module]').forEach(button=>button.addEventListener('click',()=>{$('#moduleMessage').textContent=`โมดูล “${button.dataset.futureModule}” อยู่ระหว่างพัฒนา`; }));
   fillPatient(); fillScreening(); $('#tugTime').value=state.tug.time??''; updateTugStatus(); showStep(0);
 })();
