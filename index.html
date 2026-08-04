@@ -18,6 +18,9 @@
   <style>
     .factor-heading{display:flex;align-items:center;gap:10px}.factor-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#f1e2f2;color:#854673}.factor-icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   </style>
+  <style>
+    .mini-result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px}.mini-result-card{overflow:hidden;border:1px solid #ecd9e9;border-radius:17px;background:#fff}.mini-result-picture{height:145px;background-image:url('mini-bestest-sections.png');background-size:200% 200%;background-repeat:no-repeat}.mini-result-card:nth-child(1) .mini-result-picture{background-position:0 0}.mini-result-card:nth-child(2) .mini-result-picture{background-position:100% 0}.mini-result-card:nth-child(3) .mini-result-picture{background-position:0 100%}.mini-result-card:nth-child(4) .mini-result-picture{background-position:100% 100%}.mini-result-copy{padding:14px}.mini-result-copy h3{margin:0;color:#824573;font-size:1rem}.mini-result-copy p{margin:5px 0 0}@media(max-width:640px){.mini-result-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
   <main class="app-shell">
@@ -42,10 +45,16 @@
         <button id="startScreening" class="module-card active-module" type="button"><span class="module-icon">📋</span><span class="module-text"><b>คัดกรองความเสี่ยงล้ม</b><small>ประวัติการล้ม การเดิน การทรงตัว และ Chair Stand</small></span><span class="module-arrow">→</span></button>
         <button id="startHomeSafety" class="module-card active-module" type="button"><span class="module-icon">🏠</span><span class="module-text"><b>ประเมินบ้านเสี่ยงล้ม</b><small>ตรวจสภาพแวดล้อมและจุดเสี่ยงภายในบ้าน</small></span><span class="module-arrow">→</span></button>
         <button id="startFactorRisk" class="module-card active-module" type="button"><span class="module-icon">⚠️</span><span class="module-text"><b>ประเมินปัจจัยเสี่ยงภายในและภายนอก</b><small>สุขภาพ ยา การมองเห็น และสภาพแวดล้อม</small></span><span class="module-arrow">→</span></button>
-        <button class="module-card" type="button" data-future-module="การทรงตัวอย่างละเอียด (Mini-BESTest)"><span class="module-icon">⚖️</span><span class="module-text"><b>การทรงตัวอย่างละเอียด</b><small>Mini-BESTest</small></span><span class="module-tag">เร็ว ๆ นี้</span></button>
+        <button id="startMiniBest" class="module-card active-module" type="button"><span class="module-icon">⚖️</span><span class="module-text"><b>การทรงตัวอย่างละเอียด</b><small>Mini-BESTest</small></span><span class="module-arrow">→</span></button>
         <button id="startSarcF" class="module-card active-module" type="button"><span class="module-icon">🦵</span><span class="module-text"><b>ประเมินภาวะมวลกล้ามเนื้อน้อย</b><small>SARC-F และเส้นรอบวงน่อง</small></span><span class="module-arrow">→</span></button>
       </div>
       <p id="moduleMessage" class="home-message" role="status"></p>
+    </section>
+
+    <section class="step" data-step="10" hidden>
+      <div class="section-heading"><span>⚖️</span><div><h2>การประเมินการทรงตัวอย่างละเอียด</h2><p>Mini-BESTest: 14 รายการ คะแนนเต็ม 28 คะแนน</p></div></div>
+      <form id="miniBestForm" novalidate><div id="miniBestQuestions" class="factor-questions"></div><p id="miniBestError" class="form-error" role="alert"></p><div id="miniBestResult" class="mini-result-grid" hidden></div><div class="actions"><button class="secondary" type="button" id="miniBestBackHome">← กลับหน้า Home</button><button class="primary" type="submit">สรุปคะแนน Mini-BESTest →</button></div></form>
+      <p class="disclaimer">อ้างอิง Franchignoni FP, Horak FB, Godi M, et al. Mini-BESTest (2010). ใช้โดยผู้ประเมินที่ผ่านการฝึกอบรมและใช้ร่วมกับคู่มือการทดสอบมาตรฐาน</p>
     </section>
 
     <section class="step" data-step="9" hidden>
