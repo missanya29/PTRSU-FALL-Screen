@@ -54,17 +54,11 @@
 
     <section class="step" data-step="11" hidden>
       <div class="section-heading"><span>💬</span><div><h2>การให้ Feedback</h2><p>ความคิดเห็นของท่านช่วยให้เราพัฒนาระบบให้เหมาะกับการใช้งานมากขึ้น</p></div></div>
-      <form id="feedbackForm" novalidate>
-        <div class="field-grid">
-          <label>ชื่อ *<input id="feedbackName" type="text" required></label>
-          <label>สถานที่ทำงาน *<input id="feedbackWorkplace" type="text" required></label>
-        </div>
-        <label>Feedback / ข้อเสนอแนะ *<textarea id="feedbackMessage" rows="6" required placeholder="โปรดบอกสิ่งที่ชอบ ปัญหาที่พบ หรือข้อเสนอแนะเพิ่มเติม"></textarea></label>
-        <p id="feedbackError" class="form-error" role="alert"></p>
-        <div id="feedbackResult" class="home-result house-green" hidden aria-live="polite"></div>
-        <div class="actions"><button class="secondary" type="button" id="feedbackBackHome">← กลับหน้า Home</button><button class="primary" type="submit">เปิดอีเมลเพื่อส่ง Feedback →</button></div>
-      </form>
-      <p class="disclaimer">เมื่อกดส่ง ระบบจะเปิดแอปอีเมลของผู้ใช้ พร้อมร่างข้อความถึงผู้พัฒนา ผู้ใช้เป็นผู้ตรวจทานและกดส่งอีเมลด้วยตนเอง</p>
+      <div class="feedback-frame-wrap">
+        <iframe title="Feedback – PTRSU FALL Screen" src="https://docs.google.com/forms/d/e/1FAIpQLSfJRHmCyxjD0pnbCWSFB-RKnDWtI0VPVXJRTZ3HAR3p46dX7w/viewform?embedded=true" width="640" height="754" frameborder="0" marginheight="0" marginwidth="0" style="display:block;width:100%;max-width:640px;margin:auto;border:0">กำลังโหลด…</iframe>
+      </div>
+      <div class="actions"><button class="secondary" type="button" id="feedbackBackHome">← กลับหน้า Home</button></div>
+      <p class="disclaimer">กรอกและส่ง Feedback ได้ในแบบฟอร์มด้านบน คำตอบจะบันทึกใน Google Forms ของผู้พัฒนา</p>
     </section>
 
     <section class="step" data-step="10" hidden>
@@ -175,6 +169,6 @@
       <div class="actions print-hide"><button class="secondary" type="button" data-back>← แก้ไขข้อมูล</button><button id="printButton" class="primary" type="button">🖨 พิมพ์รายงาน</button><button id="newButton" class="outline" type="button">เริ่มประเมินใหม่</button></div>
     </section>
   </main>
-  <script src="app.js?v=3.8"></script>
+  <script src="app.js?v=3.9"></script>
 </body>
 </html>
