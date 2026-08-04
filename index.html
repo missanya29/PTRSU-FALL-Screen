@@ -47,8 +47,24 @@
         <button id="startFactorRisk" class="module-card active-module" type="button"><span class="module-icon">⚠️</span><span class="module-text"><b>ประเมินปัจจัยเสี่ยงภายในและภายนอก</b><small>สุขภาพ ยา การมองเห็น และสภาพแวดล้อม</small></span><span class="module-arrow">→</span></button>
         <button id="startMiniBest" class="module-card active-module" type="button"><span class="module-icon">⚖️</span><span class="module-text"><b>การทรงตัวอย่างละเอียด</b><small>Mini-BESTest</small></span><span class="module-arrow">→</span></button>
         <button id="startSarcF" class="module-card active-module" type="button"><span class="module-icon">🦵</span><span class="module-text"><b>ประเมินภาวะมวลกล้ามเนื้อน้อย</b><small>SARC-F และเส้นรอบวงน่อง</small></span><span class="module-arrow">→</span></button>
+        <button id="startFeedback" class="module-card active-module" type="button"><span class="module-icon">💬</span><span class="module-text"><b>การให้ Feedback</b><small>ส่งข้อเสนอแนะเพื่อพัฒนาระบบ</small></span><span class="module-arrow">→</span></button>
       </div>
       <p id="moduleMessage" class="home-message" role="status"></p>
+    </section>
+
+    <section class="step" data-step="11" hidden>
+      <div class="section-heading"><span>💬</span><div><h2>การให้ Feedback</h2><p>ความคิดเห็นของท่านช่วยให้เราพัฒนาระบบให้เหมาะกับการใช้งานมากขึ้น</p></div></div>
+      <form id="feedbackForm" novalidate>
+        <div class="field-grid">
+          <label>ชื่อ *<input id="feedbackName" type="text" required></label>
+          <label>สถานที่ทำงาน *<input id="feedbackWorkplace" type="text" required></label>
+        </div>
+        <label>Feedback / ข้อเสนอแนะ *<textarea id="feedbackMessage" rows="6" required placeholder="โปรดบอกสิ่งที่ชอบ ปัญหาที่พบ หรือข้อเสนอแนะเพิ่มเติม"></textarea></label>
+        <p id="feedbackError" class="form-error" role="alert"></p>
+        <div id="feedbackResult" class="home-result house-green" hidden aria-live="polite"></div>
+        <div class="actions"><button class="secondary" type="button" id="feedbackBackHome">← กลับหน้า Home</button><button class="primary" type="submit">บันทึก Feedback →</button></div>
+      </form>
+      <p class="disclaimer">Feedback จะบันทึกไว้ในอุปกรณ์เครื่องนี้เท่านั้น จนกว่าจะมีการเชื่อมระบบฐานข้อมูลในอนาคต</p>
     </section>
 
     <section class="step" data-step="10" hidden>
@@ -159,6 +175,6 @@
       <div class="actions print-hide"><button class="secondary" type="button" data-back>← แก้ไขข้อมูล</button><button id="printButton" class="primary" type="button">🖨 พิมพ์รายงาน</button><button id="newButton" class="outline" type="button">เริ่มประเมินใหม่</button></div>
     </section>
   </main>
-  <script src="app.js?v=3.6"></script>
+  <script src="app.js?v=3.7"></script>
 </body>
 </html>
