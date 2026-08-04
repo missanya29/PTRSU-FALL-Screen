@@ -21,6 +21,15 @@
   <style>
     .mini-result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px}.mini-result-card{overflow:hidden;border:1px solid #ecd9e9;border-radius:17px;background:#fff}.mini-result-picture{height:145px;background-image:url('mini-bestest-sections.png');background-size:200% 200%;background-repeat:no-repeat}.mini-result-card:nth-child(1) .mini-result-picture{background-position:0 0}.mini-result-card:nth-child(2) .mini-result-picture{background-position:100% 0}.mini-result-card:nth-child(3) .mini-result-picture{background-position:0 100%}.mini-result-card:nth-child(4) .mini-result-picture{background-position:100% 100%}.mini-result-copy{padding:14px}.mini-result-copy h3{margin:0;color:#824573;font-size:1rem}.mini-result-copy p{margin:5px 0 0}@media(max-width:640px){.mini-result-grid{grid-template-columns:1fr}}
   </style>
+  <style>
+    /* ภาพ Mini-BESTest แบบแยกหมวด: คงสัดส่วนเพื่อไม่ให้ภาพยืด */
+    .mini-result-picture{height:180px !important;background-position:center !important;background-size:contain !important;background-repeat:no-repeat !important;background-color:#fcf9fd}
+    .mini-result-card:nth-child(1) .mini-result-picture{background-image:url('mini-anticipatory-line.png') !important}
+    .mini-result-card:nth-child(2) .mini-result-picture{background-image:url('mini-reactive-line.png') !important}
+    .mini-result-card:nth-child(3) .mini-result-picture{background-image:url('mini-sensory-line.png') !important}
+    .mini-result-card:nth-child(4) .mini-result-picture{background-image:url('mini-dynamic-gait-line.png') !important}
+    .mini-age-card{margin-bottom:18px}
+  </style>
 </head>
 <body>
   <main class="app-shell">
@@ -63,7 +72,7 @@
 
     <section class="step" data-step="10" hidden>
       <div class="section-heading"><span>⚖️</span><div><h2>การประเมินการทรงตัวอย่างละเอียด</h2><p>Mini-BESTest: 14 รายการ คะแนนเต็ม 28 คะแนน</p></div></div>
-      <form id="miniBestForm" novalidate><div id="miniBestQuestions" class="factor-questions"></div><p id="miniBestError" class="form-error" role="alert"></p><div id="miniBestResult" class="mini-result-grid" hidden></div><div class="actions"><button class="secondary" type="button" id="miniBestBackHome">← กลับหน้า Home</button><button class="primary" type="submit">สรุปคะแนน Mini-BESTest →</button></div></form>
+      <form id="miniBestForm" novalidate><article class="card mini-age-card"><label>อายุผู้รับการประเมิน (ปี) *<input id="miniBestAge" type="number" min="0" max="130" inputmode="numeric" placeholder="เช่น 72"></label><p class="hint">ใช้แปลผลคะแนนรวมตามช่วงอายุ</p></article><div id="miniBestQuestions" class="factor-questions"></div><p id="miniBestError" class="form-error" role="alert"></p><div id="miniBestResult" class="mini-result-grid" hidden></div><div class="actions"><button class="secondary" type="button" id="miniBestBackHome">← กลับหน้า Home</button><button class="primary" type="submit">สรุปคะแนน Mini-BESTest →</button></div></form>
       <p class="disclaimer">อ้างอิง Franchignoni FP, Horak FB, Godi M, et al. Mini-BESTest (2010). ใช้โดยผู้ประเมินที่ผ่านการฝึกอบรมและใช้ร่วมกับคู่มือการทดสอบมาตรฐาน</p>
     </section>
 
@@ -169,6 +178,6 @@
       <div class="actions print-hide"><button class="secondary" type="button" data-back>← แก้ไขข้อมูล</button><button id="printButton" class="primary" type="button">🖨 พิมพ์รายงาน</button><button id="newButton" class="outline" type="button">เริ่มประเมินใหม่</button></div>
     </section>
   </main>
-  <script src="app.js?v=3.9"></script>
+  <script src="app.js?v=3.10"></script>
 </body>
 </html>
