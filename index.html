@@ -58,6 +58,7 @@
         <button id="startSarcF" class="module-card active-module" type="button"><span class="module-icon">🦵</span><span class="module-text"><b>ประเมินภาวะมวลกล้ามเนื้อน้อย</b><small>SARC-F และเส้นรอบวงน่อง</small></span><span class="module-arrow">→</span></button>
         <button id="startOsteoporosis" class="module-card active-module" type="button"><span class="module-icon">🦴</span><span class="module-text"><b>ประเมินความเสี่ยงโรคกระดูกพรุนเบื้องต้น</b><small>OSTA: อายุและน้ำหนักตัว</small></span><span class="module-arrow">→</span></button>
         <button id="startStepTest" class="module-card active-module" type="button"><span class="module-icon">❤️</span><span class="module-text"><b>ประเมินความอดทนของระบบหัวใจและหลอดเลือด</b><small>2 Minute Step Test</small></span><span class="module-arrow">→</span></button>
+        <button id="startFrailty" class="module-card active-module" type="button"><span class="module-icon">🧓</span><span class="module-text"><b>คัดกรองภาวะเปราะบาง</b><small>T-FRAIL: ความอ่อนเพลีย การเดิน โรคร่วม และน้ำหนักลด</small></span><span class="module-arrow">→</span></button>
         <button id="startFeedback" class="module-card active-module" type="button"><span class="module-icon">💬</span><span class="module-text"><b>การให้ Feedback</b><small>ส่งข้อเสนอแนะเพื่อพัฒนาระบบ</small></span><span class="module-arrow">→</span></button>
       </div>
       <p id="moduleMessage" class="home-message" role="status"></p>
@@ -150,6 +151,22 @@
       <p class="disclaimer">เกณฑ์อ้างอิงตามตารางที่ให้มา: อายุ 60–64, 65–69, 70–74, 75–79, 80–84, 85–89 และ 90–94 ปี โดยอายุน้อยกว่า 60 ปีใช้เกณฑ์เดียวกับ 60–64 ปี</p>
     </section>
 
+    <section class="step" data-step="14" hidden>
+      <div class="section-heading"><span>🧓</span><div><h2>คัดกรองภาวะเปราะบาง</h2><p>Thai Simple Frailty Questionnaire (T-FRAIL)</p></div></div>
+      <form id="frailtyForm" novalidate>
+        <div id="frailtyIdentity"></div>
+        <article class="factor-card"><h3>1. ความอ่อนเพลีย</h3><p>ในช่วง 4 สัปดาห์ที่ผ่านมา ท่านรู้สึกอ่อนเพลียมากแค่ไหน</p><div class="factor-options"><label class="factor-option"><input type="radio" name="frailFatigue" value="1"> <span class="factor-score">1</span><span>ตลอดเวลา หรือเกือบตลอดเวลา</span></label><label class="factor-option"><input type="radio" name="frailFatigue" value="0"> <span class="factor-score">0</span><span>บางเวลา ส่วนน้อย หรือไม่เคยเลย</span></label></div></article>
+        <article class="factor-card"><h3>2. การขึ้นบันได</h3><p>การขึ้นบันได 10 ขั้นด้วยตัวเองโดยไม่หยุดพัก และไม่ใช้อุปกรณ์ช่วย ท่านมีปัญหาหรือไม่</p><div class="factor-options"><label class="factor-option"><input type="radio" name="frailStairs" value="0"> <span class="factor-score">0</span><span>ไม่มี</span></label><label class="factor-option"><input type="radio" name="frailStairs" value="1"> <span class="factor-score">1</span><span>มี</span></label></div></article>
+        <article class="factor-card"><h3>3. การเดิน</h3><p>การเดิน 300–400 เมตรด้วยตัวเองโดยไม่หยุดพัก และไม่ใช้อุปกรณ์ช่วย ท่านมีปัญหาหรือไม่</p><div class="factor-options"><label class="factor-option"><input type="radio" name="frailWalk" value="0"> <span class="factor-score">0</span><span>ไม่มี</span></label><label class="factor-option"><input type="radio" name="frailWalk" value="1"> <span class="factor-score">1</span><span>มี</span></label></div></article>
+        <article class="factor-card"><h3>4. โรคร่วม</h3><p>เลือกโรคที่ได้รับการวินิจฉัยแล้ว (ระบบจะนับจำนวนโรคอัตโนมัติ)</p><div id="frailIllnesses" class="checklist"></div><p class="hint">0 คะแนน: 0–4 โรค · 1 คะแนน: 5 โรคขึ้นไป</p></article>
+        <article class="factor-card"><h3>5. น้ำหนักลดโดยไม่ตั้งใจ</h3><p>เปรียบเทียบน้ำหนักโดยไม่รวมรองเท้า</p><div class="field-grid"><label>น้ำหนักปัจจุบัน (กิโลกรัม) *<input id="frailCurrentWeight" type="number" min="1" max="300" step="0.1" inputmode="decimal" placeholder="เช่น 52"></label><label>น้ำหนักเมื่อ 1 ปีก่อน (กิโลกรัม) *<input id="frailPreviousWeight" type="number" min="1" max="300" step="0.1" inputmode="decimal" placeholder="เช่น 56"></label></div><p class="hint">0 คะแนน: น้ำหนักลดน้อยกว่า 5% · 1 คะแนน: น้ำหนักลดตั้งแต่ 5% ขึ้นไป</p></article>
+        <p id="frailtyError" class="form-error" role="alert"></p>
+        <div id="frailtyResult" class="home-result" hidden aria-live="polite"></div>
+        <div class="actions"><button class="secondary" type="button" id="frailtyBackHome">← กลับหน้า Home</button><button class="primary" type="submit">สรุปผล T-FRAIL →</button></div>
+      </form>
+      <p class="disclaimer">อ้างอิง Sriwong T, Warut et al. BMC Geriatr. 2022;22:161. และเอกสาร Healthy aging and innovation in elderly care. แบบคัดกรองนี้ใช้เพื่อการประเมินเบื้องต้น ไม่ทดแทนการวินิจฉัยโดยบุคลากรสุขภาพ</p>
+    </section>
+
     <section class="step active" data-step="1">
       <div class="section-heading"><span>👤</span><div><h2>ข้อมูลผู้รับการประเมิน</h2><p>ช่องที่มี * จำเป็นต้องกรอก</p></div></div>
       <form id="patientForm" novalidate>
@@ -207,6 +224,6 @@
       <div class="actions print-hide"><button class="secondary" type="button" data-back>← แก้ไขข้อมูล</button><button id="printButton" class="primary" type="button">🖨 พิมพ์รายงาน</button><button id="newButton" class="outline" type="button">เริ่มประเมินใหม่</button></div>
     </section>
   </main>
-  <script src="app.js?v=3.18"></script>
+  <script src="app.js?v=3.19"></script>
 </body>
 </html>
