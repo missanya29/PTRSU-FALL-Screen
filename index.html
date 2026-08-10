@@ -57,6 +57,7 @@
         <button id="startMiniBest" class="module-card active-module" type="button"><span class="module-icon">⚖️</span><span class="module-text"><b>การทรงตัวอย่างละเอียด</b><small>Mini-BESTest</small></span><span class="module-arrow">→</span></button>
         <button id="startSarcF" class="module-card active-module" type="button"><span class="module-icon">🦵</span><span class="module-text"><b>ประเมินภาวะมวลกล้ามเนื้อน้อย</b><small>SARC-F และเส้นรอบวงน่อง</small></span><span class="module-arrow">→</span></button>
         <button id="startOsteoporosis" class="module-card active-module" type="button"><span class="module-icon">🦴</span><span class="module-text"><b>ประเมินความเสี่ยงโรคกระดูกพรุนเบื้องต้น</b><small>OSTA: อายุและน้ำหนักตัว</small></span><span class="module-arrow">→</span></button>
+        <button id="startStepTest" class="module-card active-module" type="button"><span class="module-icon">❤️</span><span class="module-text"><b>ประเมินความอดทนของระบบหัวใจและหลอดเลือด</b><small>2 Minute Step Test</small></span><span class="module-arrow">→</span></button>
         <button id="startFeedback" class="module-card active-module" type="button"><span class="module-icon">💬</span><span class="module-text"><b>การให้ Feedback</b><small>ส่งข้อเสนอแนะเพื่อพัฒนาระบบ</small></span><span class="module-arrow">→</span></button>
       </div>
       <p id="moduleMessage" class="home-message" role="status"></p>
@@ -137,6 +138,18 @@
       <p class="disclaimer">อ้างอิง Koh LK, et al. Osteoporos Int. 2001;12(8):699–705. เครื่องมือนี้เป็นการประเมินเบื้องต้น ไม่ทดแทนการวินิจฉัยหรือการตรวจมวลกระดูกโดยบุคลากรทางการแพทย์</p>
     </section>
 
+    <section class="step" data-step="13" hidden>
+      <div class="section-heading"><span>❤️</span><div><h2>ประเมินความอดทนของระบบหัวใจและหลอดเลือด</h2><p>2 Minute Step Test</p></div></div>
+      <form id="stepTestForm" novalidate>
+        <div id="stepTestIdentity"></div>
+        <article class="card"><fieldset><legend>เพศ *</legend><div class="choice-row"><label class="choice"><input type="radio" name="stepTestGender" value="male"> ชาย</label><label class="choice"><input type="radio" name="stepTestGender" value="female"> หญิง</label></div></fieldset><label>จำนวนครั้งที่ยกเข่าถึงระดับที่กำหนด ภายใน 2 นาที *<input id="stepTestReps" type="number" min="0" max="500" step="1" inputmode="numeric" placeholder="เช่น 90" required></label><p class="hint">หากได้จำนวนครั้งน้อยกว่าเกณฑ์ขั้นต่ำของอายุและเพศ ให้แปลผลว่า “ไม่ผ่านเกณฑ์”</p></article>
+        <p id="stepTestError" class="form-error" role="alert"></p>
+        <div id="stepTestResult" class="home-result" hidden aria-live="polite"></div>
+        <div class="actions"><button class="secondary" type="button" id="stepTestBackHome">← กลับหน้า Home</button><button class="primary" type="submit">แปลผล 2 Minute Step Test →</button></div>
+      </form>
+      <p class="disclaimer">เกณฑ์อ้างอิงตามตารางที่ให้มา: อายุ 60–64, 65–69, 70–74, 75–79, 80–84, 85–89 และ 90–94 ปี โดยอายุน้อยกว่า 60 ปีใช้เกณฑ์เดียวกับ 60–64 ปี</p>
+    </section>
+
     <section class="step active" data-step="1">
       <div class="section-heading"><span>👤</span><div><h2>ข้อมูลผู้รับการประเมิน</h2><p>ช่องที่มี * จำเป็นต้องกรอก</p></div></div>
       <form id="patientForm" novalidate>
@@ -194,6 +207,6 @@
       <div class="actions print-hide"><button class="secondary" type="button" data-back>← แก้ไขข้อมูล</button><button id="printButton" class="primary" type="button">🖨 พิมพ์รายงาน</button><button id="newButton" class="outline" type="button">เริ่มประเมินใหม่</button></div>
     </section>
   </main>
-  <script src="app.js?v=3.17"></script>
+  <script src="app.js?v=3.18"></script>
 </body>
 </html>
