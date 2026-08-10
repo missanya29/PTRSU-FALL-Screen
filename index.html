@@ -72,13 +72,14 @@
 
     <section class="step" data-step="10" hidden>
       <div class="section-heading"><span>⚖️</span><div><h2>การประเมินการทรงตัวอย่างละเอียด</h2><p>Mini-BESTest: 14 รายการ คะแนนเต็ม 28 คะแนน</p></div></div>
-      <form id="miniBestForm" novalidate><article class="card mini-age-card"><label>อายุผู้รับการประเมิน (ปี) *<input id="miniBestAge" type="number" min="0" max="130" inputmode="numeric" placeholder="เช่น 72"></label><p class="hint">ใช้แปลผลคะแนนรวมตามช่วงอายุ</p></article><div id="miniBestQuestions" class="factor-questions"></div><p id="miniBestError" class="form-error" role="alert"></p><div id="miniBestResult" class="mini-result-grid" hidden></div><div class="actions"><button class="secondary" type="button" id="miniBestBackHome">← กลับหน้า Home</button><button class="primary" type="submit">สรุปคะแนน Mini-BESTest →</button></div></form>
+      <form id="miniBestForm" novalidate><div id="miniBestIdentity"></div><article class="card mini-age-card"><label>อายุผู้รับการประเมิน (ปี) *<input id="miniBestAge" type="number" min="0" max="130" inputmode="numeric" placeholder="เช่น 72"></label><p class="hint">ใช้แปลผลคะแนนรวมตามช่วงอายุ</p></article><div id="miniBestQuestions" class="factor-questions"></div><p id="miniBestError" class="form-error" role="alert"></p><div id="miniBestResult" class="mini-result-grid" hidden></div><div class="actions"><button class="secondary" type="button" id="miniBestBackHome">← กลับหน้า Home</button><button class="primary" type="submit">สรุปคะแนน Mini-BESTest →</button></div></form>
       <p class="disclaimer">อ้างอิง Franchignoni FP, Horak FB, Godi M, et al. Mini-BESTest (2010). ใช้โดยผู้ประเมินที่ผ่านการฝึกอบรมและใช้ร่วมกับคู่มือการทดสอบมาตรฐาน</p>
     </section>
 
     <section class="step" data-step="9" hidden>
       <div class="section-heading"><span>🦵</span><div><h2>ประเมินภาวะมวลกล้ามเนื้อน้อย</h2><p>คัดกรองด้วย SARC-F และเส้นรอบวงน่อง (SARC-CalF)</p></div></div>
       <form id="sarcForm" novalidate>
+        <div id="sarcIdentity"></div>
         <div id="sarcQuestions" class="factor-questions"></div>
         <article class="factor-card"><h3 class="factor-heading"><span class="factor-icon" aria-hidden="true">◯</span><span>6. เส้นรอบวงน่อง</span></h3><div class="field-grid"><fieldset><legend>เพศ *</legend><div class="choice-row"><label class="choice"><input type="radio" name="sarcGender" value="male"> ชาย</label><label class="choice"><input type="radio" name="sarcGender" value="female"> หญิง</label></div></fieldset><label>เส้นรอบวงน่อง (เซนติเมตร) *<input id="calfCircumference" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="เช่น 33.5"></label></div><p class="hint">ผ่านเกณฑ์: ชาย ≥ 34 ซม. / หญิง ≥ 33 ซม. หากไม่ผ่านเกณฑ์ เพิ่ม 10 คะแนน</p></article>
         <p id="sarcError" class="form-error" role="alert"></p>
@@ -91,6 +92,7 @@
     <section class="step" data-step="8" hidden>
       <div class="section-heading"><span>⚠️</span><div><h2>ประเมินปัจจัยเสี่ยงภายในและภายนอก</h2><p>เลือกคำตอบที่ตรงกับผู้รับการประเมินมากที่สุดในแต่ละข้อ</p></div></div>
       <form id="factorRiskForm" novalidate>
+        <div id="factorIdentity"></div>
         <div id="factorQuestions" class="factor-questions"></div>
         <p id="factorError" class="form-error" role="alert"></p>
         <div id="factorResult" class="home-result" hidden aria-live="polite"></div>
@@ -102,6 +104,7 @@
     <section class="step" data-step="7" hidden>
       <div class="section-heading"><span>🏠</span><div><h2>ประเมินสภาพบ้านเสี่ยงล้ม</h2><p>ทำเครื่องหมาย ✓ ในข้อที่พบความเสี่ยงภายในหรือรอบบ้าน</p></div></div>
       <form id="homeSafetyForm">
+        <div id="homeSafetyIdentity"></div>
         <div class="checklist">
           <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>1. พื้นผิวลื่น หรือมีสิ่งปูพื้นที่ไม่ยึดแน่น</b>เช่น เสื่อน้ำมัน กระเบื้องลื่น พื้นหินขัด พรม เสื่อ ผ้า หรือมีน้ำบนพื้น</span></label>
           <label class="risk-item"><input type="checkbox" name="homeRisk"><span><b>2. มีสิ่งของหรือสายไฟกีดขวาง</b>กีดขวางทางเดินหรือบันได เสี่ยงต่อการเดินชนหรือสะดุดล้ม</span></label>
@@ -135,7 +138,7 @@
         </div>
         <label>หมายเหตุ <textarea id="note" rows="4" placeholder="เช่น โรคประจำตัว ยาที่ใช้ หรือข้อมูลสำคัญ"></textarea></label>
         <p id="patientError" class="form-error" role="alert"></p>
-        <div class="actions actions-end"><button class="primary" type="submit">ถัดไป <span>→</span></button></div>
+        <div class="actions"><button class="secondary" type="button" id="screeningBackHome">← กลับหน้า Home</button><button class="primary" type="submit">ถัดไป <span>→</span></button></div>
       </form>
     </section>
 
@@ -178,6 +181,6 @@
       <div class="actions print-hide"><button class="secondary" type="button" data-back>← แก้ไขข้อมูล</button><button id="printButton" class="primary" type="button">🖨 พิมพ์รายงาน</button><button id="newButton" class="outline" type="button">เริ่มประเมินใหม่</button></div>
     </section>
   </main>
-  <script src="app.js?v=3.13"></script>
+  <script src="app.js?v=3.15"></script>
 </body>
 </html>
