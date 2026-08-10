@@ -43,7 +43,7 @@
     button.disabled=true;
     message.textContent='กำลังส่งข้อมูล…';
     try{
-      await fetch(GOOGLE_SHEETS_WEB_APP_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(assessmentPayload(type))});
+      await fetch(GOOGLE_SHEETS_WEB_APP_URL,{method:'POST',mode:'no-cors',credentials:'include',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(assessmentPayload(type))});
       message.textContent='ส่งข้อมูลแล้ว กรุณาตรวจใน Google Sheets ภายในครู่เดียว';
     }catch(err){
       message.textContent='ส่งข้อมูลไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่';
