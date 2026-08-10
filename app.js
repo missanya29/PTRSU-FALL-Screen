@@ -20,6 +20,41 @@
   function sexText(v){ return v === 'male' ? 'ชาย' : v === 'female' ? 'หญิง' : '-'; }
   function yesNo(v){ return v === 'yes' ? 'ใช่' : v === 'no' ? 'ไม่ใช่' : '-'; }
 
+  // Google Apps Script Web App supplied by the project owner.
+  const GOOGLE_SHEETS_WEB_APP_URL='https://script.google.com/macros/s/AKfycbziQ5jI7X_7R9LQ-Ai1fBQMwjaZD0NaozcFZRfw0c4Y2TSW17DQUmZNBIpRLASl4X-oZA/exec';
+  function googleSaveMarkup(type){
+    return `<div class="google-save" style="grid-column:1/-1;margin:16px 0 4px"><button type="button" class="primary" style="width:100%" data-google-save="${type}">💾 บันทึกผลลง Google Drive</button><p class="hint google-save-message" style="text-align:center" aria-live="polite"></p></div>`;
+  }
+  function assessmentPayload(type){
+    const submittedAt=new Date().toLocaleString('th-TH');
+    if(type==='screening'){
+      const risk=classify();
+      return {assessmentType:'คัดกรองความเสี่ยงล้ม',submittedAt,patient:state.patient,screening:state.screening,tug:state.tug,balance:state.balance,chair:state.chair,result:{level:risk.level,title:risk.title,detail:risk.detail}};
+    }
+    if(type==='homeSafety') return {assessmentType:'ประเมินบ้านเสี่ยงล้ม',submittedAt,...(state.homeSafety||{})};
+    if(type==='factorRisk') return {assessmentType:'ปัจจัยเสี่ยงภายในและภายนอก',submittedAt,...(state.factorRisk||{})};
+    if(type==='sarc') return {assessmentType:'ประเมินภาวะมวลกล้ามเนื้อน้อย',submittedAt,...(state.sarc||{})};
+    if(type==='miniBest') return {assessmentType:'Mini-BESTest',submittedAt,...(state.miniBest||{})};
+    return {assessmentType:type,submittedAt};
+  }
+  async function saveAssessmentToGoogle(button){
+    const type=button.dataset.googleSave;
+    const message=button.parentElement.querySelector('.google-save-message');
+    button.disabled=true;
+    message.textContent='กำลังส่งข้อมูล…';
+    try{
+      await fetch(GOOGLE_SHEETS_WEB_APP_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(assessmentPayload(type))});
+      message.textContent='ส่งข้อมูลแล้ว กรุณาตรวจใน Google Sheets ภายในครู่เดียว';
+    }catch(err){
+      message.textContent='ส่งข้อมูลไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่';
+      button.disabled=false;
+    }
+  }
+  document.addEventListener('click',event=>{
+    const button=event.target.closest('[data-google-save]');
+    if(button) saveAssessmentToGoogle(button);
+  });
+
   function showStep(step){
     state.step = Math.max(0, Math.min(11, step)); save();
     $$('.step').forEach(el => { const on=Number(el.dataset.step)===state.step; el.hidden=!on; el.classList.toggle('active',on); });
@@ -88,6 +123,7 @@
   function renderReport(){ const p=state.patient,s=state.screening,r=classify(),tug=tugResult(),bal=balanceResult(),chair=chairResult(); const f=s.fallHistory==='yes'?`${s.fallCount==='2'?'2 ครั้งขึ้นไป':'1 ครั้ง'}${s.injury==='yes'?' (บาดเจ็บ)':' (ไม่บาดเจ็บ)'}`:'ไม่เคย'; const times=(state.balance.times||[]).map((x,i)=>x===null?`${stages[i][0]}: ไม่ได้ทดสอบ`:`${stages[i][0]}: ${x} วินาที`).join('<br>'); const tests=allScreeningNo()?'<tr><td colspan="2">ไม่ต้องทำการทดสอบสมรรถภาพเพิ่มเติม เนื่องจากตอบ “ไม่” ทั้ง 3 ข้อ</td></tr>':`<tr><td>TUG</td><td>${state.tug.time} วินาที · ${tug?'ผ่าน':'ไม่ผ่าน'}</td></tr><tr><td>4-Stage Balance</td><td>${bal?'ผ่าน':'ไม่ผ่าน'}<br><small>${times}</small></td></tr><tr><td>30-sec Chair Stand</td><td>${state.chair.reps} ครั้ง · ${chair?'ผ่าน':'ไม่ผ่าน'}</td></tr>`;
     const plan=carePlan(r.level); const list=(items)=>`<ul class="recommendations">${items.map(x=>`<li>${x}</li>`).join('')}</ul>`;
     $('#report').innerHTML=`<div class="report-block"><h3>ข้อมูลผู้รับการประเมิน</h3><div class="report-grid"><p><b>ชื่อ:</b> ${safe(p.name)}</p><p><b>อายุ:</b> ${safe(p.age)} ปี</p><p><b>เพศ:</b> ${sexText(p.gender)}</p><p><b>วันที่ประเมิน:</b> ${safe(p.date)}</p><p><b>ผู้ประเมิน:</b> ${safe(p.assessor)}</p><p><b>หมายเหตุ:</b> ${safe(p.note||'-')}</p></div></div><div class="report-block"><h3>ผลการคัดกรองและการทดสอบ</h3><table class="summary-table"><thead><tr><th>รายการ</th><th>ผล</th></tr></thead><tbody><tr><td>ประวัติหกล้ม</td><td>${f}</td></tr><tr><td>เดินไม่มั่นคง / เซ</td><td>${yesNo(s.unsteady)}</td></tr><tr><td>กังวลหรือกลัวการล้ม</td><td>${yesNo(s.fear)}</td></tr>${tests}</tbody></table></div><div class="risk-banner risk-${r.level}"><h3>${r.title}</h3><p>${r.detail}</p></div><div class="report-block"><h3>ควรได้รับ</h3>${list(plan.assess)}</div><div class="report-block"><h3>คำแนะนำ</h3>${list(plan.advice)}</div><div class="report-block"><h3>การติดตาม</h3>${list(plan.follow)}</div>`;
+    $('#report').insertAdjacentHTML('beforeend',googleSaveMarkup('screening'));
   }
   function allScreeningNo(){const s=state.screening;return s.fallHistory==='no'&&s.unsteady==='no'&&s.fear==='no';}
   function validateScreening(){const s=state.screening;if(!s.fallHistory||!s.unsteady||!s.fear)return 'กรุณาตอบคำถามคัดกรองทั้ง 3 ข้อ';if(s.fallHistory==='yes'&&(!s.fallCount||!s.injury))return 'กรุณาระบุจำนวนครั้งที่หกล้มและการบาดเจ็บ';return '';}
@@ -217,6 +253,34 @@
   $('#startMiniBest').addEventListener('click',()=>{renderMiniBest();$('#miniBestForm').reset();$('#miniBestAge').value=state.patient.age??'';$('#miniBestResult').hidden=true;error('#miniBestError','');showStep(10);});
   $('#miniBestBackHome').addEventListener('click',()=>showStep(0));
   $('#miniBestForm').addEventListener('submit',e=>{e.preventDefault();const ageInput=$('#miniBestAge').value;const age=Number(ageInput);const scores=Array.from({length:14},(_,i)=>calculatedMiniScore(i));if(ageInput===''||!Number.isFinite(age)||age<0){error('#miniBestError','กรุณาระบุอายุผู้รับการประเมิน');return;}if(scores.some(x=>x==='')){error('#miniBestError','กรุณาให้คะแนนและกรอกข้อมูลครบทั้ง 14 รายการ');return;}error('#miniBestError','');const values=scores.map(Number);const sectionScores=[values.slice(0,3).reduce((a,b)=>a+b,0),values.slice(3,6).reduce((a,b)=>a+b,0),values.slice(6,9).reduce((a,b)=>a+b,0),values.slice(9,14).reduce((a,b)=>a+b,0)];const total=sectionScores.reduce((a,b)=>a+b,0);const cutoff=age>=60?18:22;const atRisk=total<cutoff;const ageCriterion=age>=60?'อายุ 60 ปีขึ้นไป: คะแนนน้อยกว่า 18 คะแนน มีความเสี่ยงล้ม':'อายุต่ำกว่า 60 ปี: ใช้เกณฑ์คะแนนน้อยกว่า 22 คะแนน มีความเสี่ยงล้ม';const result=$('#miniBestResult');result.innerHTML=miniSections.map(([title,items],i)=>`<article class="mini-result-card"><div class="mini-result-picture"></div><div class="mini-result-copy"><h3>${title}</h3><p><b>${sectionScores[i]} / ${items.length*2} คะแนน</b></p></div></article>`).join('')+`<div class="home-result ${atRisk?'house-red':'house-green'}" style="grid-column:1/-1"><h3>คะแนนรวม Mini-BESTest</h3><p><b>${total} / 28 คะแนน</b></p><p><b>${atRisk?'มีความเสี่ยงล้ม':'ไม่เข้าเกณฑ์เสี่ยงล้มตามคะแนน Mini-BESTest'}</b></p><p>${ageCriterion}</p></div>`;result.hidden=false;result.scrollIntoView({behavior:'smooth',block:'center'});});
+  function appendGoogleSave(result,type){if(!result.querySelector('[data-google-save]'))result.insertAdjacentHTML('beforeend',googleSaveMarkup(type));}
+  $('#homeSafetyForm').addEventListener('submit',()=>{
+    const risks=$$('input[name="homeRisk"]:checked').map(input=>input.parentElement.innerText.trim());
+    state.homeSafety={riskCount:risks.length,risks};save();
+    appendGoogleSave($('#homeSafetyResult'),'homeSafety');
+  });
+  $('#factorRiskForm').addEventListener('submit',()=>{
+    const scores=factorItems.map((_,index)=>radio(`factor${index}`));
+    if(scores.some(score=>score===''))return;
+    state.factorRisk={...(state.factorRisk||{}),responses:factorItems.map(([item,options],index)=>({item,score:Number(scores[index]),answer:options[Number(scores[index])]}))};save();
+    appendGoogleSave($('#factorResult'),'factorRisk');
+  });
+  $('#sarcForm').addEventListener('submit',()=>{
+    const scores=sarcItems.map((_,index)=>radio(`sarc${index}`));
+    if(scores.some(score=>score==='')||!radio('sarcGender')||$('#calfCircumference').value==='')return;
+    state.sarc={...(state.sarc||{}),responses:sarcItems.map(([item,options],index)=>({item,score:Number(scores[index]),answer:options[Number(scores[index])]}))};save();
+    appendGoogleSave($('#sarcResult'),'sarc');
+  });
+  $('#miniBestForm').addEventListener('submit',()=>{
+    const ageInput=$('#miniBestAge').value;
+    const scores=Array.from({length:14},(_,i)=>calculatedMiniScore(i));
+    if(ageInput===''||scores.some(score=>score===''))return;
+    const values=scores.map(Number);
+    const sectionScores=[values.slice(0,3).reduce((a,b)=>a+b,0),values.slice(3,6).reduce((a,b)=>a+b,0),values.slice(6,9).reduce((a,b)=>a+b,0),values.slice(9,14).reduce((a,b)=>a+b,0)];
+    const total=sectionScores.reduce((a,b)=>a+b,0),age=Number(ageInput),cutoff=age>=60?18:22;
+    state.miniBest={age,scores:values,sectionScores,total,cutoff,atRisk:total<cutoff};save();
+    appendGoogleSave($('#miniBestResult'),'miniBest');
+  });
   $('#startFeedback').addEventListener('click',()=>showStep(11));
   $('#feedbackBackHome').addEventListener('click',()=>showStep(0));
   $$('[data-future-module]').forEach(button=>button.addEventListener('click',()=>{$('#moduleMessage').textContent=`โมดูล “${button.dataset.futureModule}” อยู่ระหว่างพัฒนา`; }));
