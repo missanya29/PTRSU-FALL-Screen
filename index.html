@@ -56,6 +56,7 @@
         <button id="startFactorRisk" class="module-card active-module" type="button"><span class="module-icon">⚠️</span><span class="module-text"><b>ประเมินปัจจัยเสี่ยงภายในและภายนอก</b><small>สุขภาพ ยา การมองเห็น และสภาพแวดล้อม</small></span><span class="module-arrow">→</span></button>
         <button id="startMiniBest" class="module-card active-module" type="button"><span class="module-icon">⚖️</span><span class="module-text"><b>การทรงตัวอย่างละเอียด</b><small>Mini-BESTest</small></span><span class="module-arrow">→</span></button>
         <button id="startSarcF" class="module-card active-module" type="button"><span class="module-icon">🦵</span><span class="module-text"><b>ประเมินภาวะมวลกล้ามเนื้อน้อย</b><small>SARC-F และเส้นรอบวงน่อง</small></span><span class="module-arrow">→</span></button>
+        <button id="startOsteoporosis" class="module-card active-module" type="button"><span class="module-icon">🦴</span><span class="module-text"><b>ประเมินความเสี่ยงโรคกระดูกพรุนเบื้องต้น</b><small>OSTA: อายุและน้ำหนักตัว</small></span><span class="module-arrow">→</span></button>
         <button id="startFeedback" class="module-card active-module" type="button"><span class="module-icon">💬</span><span class="module-text"><b>การให้ Feedback</b><small>ส่งข้อเสนอแนะเพื่อพัฒนาระบบ</small></span><span class="module-arrow">→</span></button>
       </div>
       <p id="moduleMessage" class="home-message" role="status"></p>
@@ -124,6 +125,18 @@
       <p class="disclaimer">ปรับปรุงเพิ่มเติมจาก “บ้านปลอดภัยไม่เสี่ยงล้ม” โดยชุมเขต แสงวงเจริญ ศูนย์ออกแบบสภาพแวดล้อมเพื่อทุกคน มหาวิทยาลัยธรรมศาสตร์ และกรมกิจการผู้สูงอายุ (2563)</p>
     </section>
 
+    <section class="step" data-step="11" hidden>
+      <div class="section-heading"><span>🦴</span><div><h2>ประเมินความเสี่ยงโรคกระดูกพรุนเบื้องต้น</h2><p>Osteoporosis Self-Assessment Tool for Asians (OSTA)</p></div></div>
+      <form id="osteoporosisForm" novalidate>
+        <div id="osteoporosisIdentity"></div>
+        <article class="card"><label>น้ำหนักตัว (กิโลกรัม) *<input id="osteoporosisWeight" type="number" min="1" max="300" step="0.1" inputmode="decimal" placeholder="เช่น 52.5" required></label><p class="hint">สูตร: 0.2 × (น้ำหนักตัว − อายุ) และตัดเศษทศนิยมทิ้ง โดยไม่ปัดเศษ</p></article>
+        <p id="osteoporosisError" class="form-error" role="alert"></p>
+        <div id="osteoporosisResult" class="home-result" hidden aria-live="polite"></div>
+        <div class="actions"><button class="secondary" type="button" id="osteoporosisBackHome">← กลับหน้า Home</button><button class="primary" type="submit">คำนวณความเสี่ยง →</button></div>
+      </form>
+      <p class="disclaimer">อ้างอิง Koh LK, et al. Osteoporos Int. 2001;12(8):699–705. เครื่องมือนี้เป็นการประเมินเบื้องต้น ไม่ทดแทนการวินิจฉัยหรือการตรวจมวลกระดูกโดยบุคลากรทางการแพทย์</p>
+    </section>
+
     <section class="step active" data-step="1">
       <div class="section-heading"><span>👤</span><div><h2>ข้อมูลผู้รับการประเมิน</h2><p>ช่องที่มี * จำเป็นต้องกรอก</p></div></div>
       <form id="patientForm" novalidate>
@@ -181,6 +194,6 @@
       <div class="actions print-hide"><button class="secondary" type="button" data-back>← แก้ไขข้อมูล</button><button id="printButton" class="primary" type="button">🖨 พิมพ์รายงาน</button><button id="newButton" class="outline" type="button">เริ่มประเมินใหม่</button></div>
     </section>
   </main>
-  <script src="app.js?v=3.15"></script>
+  <script src="app.js?v=3.16"></script>
 </body>
 </html>
